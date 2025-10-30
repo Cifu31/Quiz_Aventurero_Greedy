@@ -50,3 +50,33 @@ Guarda el siguiente código en un archivo llamado `mochila_fraccional.py` y ejec
 
 ```bash
 Quiz_Aventurero_Greedy.py
+def mochila_fraccional(objetos, capacidad):
+    objetos.sort(key=lambda x: x['valor'] / x['peso'], reverse=True)
+
+    peso_actual = 0
+    valor_total = 0
+    combinacion = []
+
+    for obj in objetos:
+        if peso_actual + obj['peso'] <= capacidad:
+            peso_actual += obj['peso']
+            valor_total += obj['valor']
+            combinacion.append({
+                'objeto': obj['nombre'],
+                'fraccion': 1,
+                'peso_tomado': obj['peso'],
+                'valor_tomado': obj['valor']
+            })
+        else:
+            fraccion = (capacidad - peso_actual) / obj['peso']
+            valor_total += obj['valor'] * fraccion
+            peso_actual += obj['peso'] * fraccion
+            combinacion.append({
+                'objeto': obj['nombre'],
+                'fraccion': round(fraccion, 2),
+                'peso_tomado': round(obj['peso'] * fraccion, 2),
+                'valor_tomado': round(obj['valor'] * fraccion, 2)
+            })
+            break
+
+    return valor_total, combinacion
